@@ -1,8 +1,13 @@
 from fastapi import FastAPI
-from pytubefix import YouTube
+import requests
 app = FastAPI()
 @app.get("/search")
-def get_stream(url: str):
-    yt = YouTube(url)
-    link = yt.streams.first().url
-    return link
+def get_video():
+    url = "https://www.clipto.com/api/youtube"
+    payload = {
+        "url": "https://youtu.be/jQdDpRTVe9k?si=tbXO9xj1xakNgQhn"
+    }
+
+    r = requests.post(url, json=payload)
+    print(r.status_code)
+    return r.text
