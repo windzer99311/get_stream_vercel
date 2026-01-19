@@ -2,12 +2,15 @@ from fastapi import FastAPI
 import requests
 app = FastAPI()
 @app.get("/search")
-def get_video():
-    url = "https://www.clipto.com/api/youtube"
+def get_stream(url: str):
+    api = "https://www.clipto.com/api/youtube"
     payload = {
-        "url": "https://youtu.be/jQdDpRTVe9k?si=tbXO9xj1xakNgQhn"
+        "url": url
     }
-
-    r = requests.post(url, json=payload)
-    print(r.status_code)
-    return r.text
+    r = requests.post(api, json=payload)
+    for item in r.json()["medias"]:
+        if item["itag"] == 139:
+            stream = item["url"]
+            return {
+                "stream": stream
+            }
